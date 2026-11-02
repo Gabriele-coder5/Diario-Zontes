@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="it" style="--bg: #f4f5f0; --surface: #ffffff; --ink: #172a28; --brand: #173d35; --accent: #d9edac; --brand-ink: #ffffff; --accent-ink: #14231b; --muted: #586664; --line: #dadddd; --soft: #f6fbea; --radius: 18px; --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; --font-size: 16px;"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#173d35"><meta name="description" content="Il diario autonomo del tuo Zontes: rifornimenti, spese e manutenzione, anche senza Internet."><title>Zontes ZT368 E · Diario di bordo</title>
+<style id="base-style">/* ASPETTO DEL DIARIO — modifica liberamente queste regole.
+   I colori modificabili dal pannello sono definiti dalle variabili in fondo. */
+
+*{box-sizing:border-box}
+body{margin:0;
+  background:#f4f5f0;
+  color:#172a28;
+  font:16px system-ui,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+header{padding:24px 6%;
+  border-bottom:1px solid #dce0d7;
+  display:flex;
+  justify-content:space-between;
+  align-items:center}
+.brand{font-weight:800;
+  letter-spacing:-1px;
+  font-size:23px}
+.badge{font-size:12px;
+  background:#e1e8dc;
+  padding:8px 13px;
+  border-radius:30px}
+main{max-width:1160px;
+  margin:38px auto;
+  padding:0 24px}
+.hero{background:#173d35;
+  color:#fafaf1;
+  border-radius:24px;
+  padding:34px;
+  display:flex;
+  justify-content:space-between;
+  gap:25px}
+.eyebrow{font-size:12px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:#a8c0aa}
+h1{font-size:46px;
+  letter-spacing:-2px;
+  margin:10px 0}
+p{line-height:1.6}
+.hero p{color:#c2d0c4;
+  margin-bottom:0}
+.odo{text-align:right;
+  min-width:180px}
+.odo strong{font-size:44px;
+  display:block}
+.odo button{background:transparent;
+  border:0;
+  color:#d5e9a9;
+  text-decoration:underline;
+  font-size:13px}
+.stats{display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin:22px 0}
+.card{background:#fff;
+  border:1px solid #e1e4da;
+  border-radius:18px;
+  padding:24px}
+.label{font-size:13px;
+  color:#67756e}
+.value{font-size:32px;
+  font-weight:750;
+  margin:9px 0}
+.small{font-size:13px;
+  color:#748076}
+h2{font-size:21px;
+  margin:0}
+section{margin:28px 0}
+.sectionhead{display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+  gap:10px}
+.primary{border:0;
+  border-radius:10px;
+  background:#d9edac;
+  color:#1c392c;
+  padding:12px 18px;
+  font-weight:650}
+.outline{border:1px solid #ced6c7;
+  border-radius:9px;
+  background:white;
+  padding:9px 13px}
+.grid{display:grid;
+  grid-template-columns:1.6fr 1fr;
+  gap:22px}
+.filters{display:flex;
+  gap:7px;
+  margin:17px 0}
+.filters button{border:0;
+  padding:8px 13px;
+  border-radius:20px;
+  background:#edf0e7;
+  font-size:13px}
+.filters .active{background:#193d34;
+  color:white}
+.row{display:flex;
+  gap:14px;
+  align-items:center;
+  padding:19px 0;
+  border-top:1px solid #eef0e9}
+.icon{background:#edf2e4;
+  border-radius:12px;
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center}
+.row .info{flex:1}
+.row b{display:block;
+  font-size:14px}
+.row small{color:#758075;
+  font-size:12px}
+.amount{font-weight:700}
+.edit{background:none;
+  border:0;
+  color:#62705f;
+  padding:8px}
+.track{height:13px;
+  background:#e7ebdf;
+  border-radius:10px;
+  overflow:hidden;
+  display:flex;
+  margin:25px 0 16px}
+.fuelbar{background:#93b865}
+.servicebar{background:#244c40}
+.legend{display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  margin:14px 0}
+.notice{background:#edf2e4;
+  border-radius:12px;
+  padding:16px;
+  font-size:13px;
+  line-height:1.65;
+  margin-top:22px}
+.footer{font-size:12px;
+  color:#7b867c;
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  margin:28px 0 40px}
+dialog{border:0;
+  border-radius:20px;
+  padding:28px;
+  width:min(480px,94vw);
+  box-shadow:0 25px 80px #0003}
+dialog::backdrop{background:#102a2366}
+form{display:grid;
+  gap:13px}
+label{font-size:13px;
+  display:grid;
+  gap:6px}
+input,select{border:1px solid #cbd4c5;
+  border-radius:8px;
+  padding:11px;
+  width:100%;
+  background:white}
+form h2{margin-bottom:6px}
+.actions{display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  margin-top:12px}
+.delete{margin-right:auto;
+  color:#a14639;
+  background:none;
+  border:0}
+.empty{padding:25px;
+  color:#748076}
+@media(max-width:700px){main{margin-top:22px;
+  padding:0 16px}
+.hero{padding:24px;
+  display:block}
+h1{font-size:37px}
+.odo{text-align:left;
+  margin-top:25px}
+.odo strong{font-size:33px}
+.stats{gap:8px}
+.stats .card{padding:15px 12px}
+.value{font-size:23px}
+.grid{grid-template-columns:1fr}
+.footer{flex-direction:column}
+.badge{font-size:10px}
+header{padding:20px}
+.sectionhead h2{font-size:19px}
+}
+
+
+[hidden]{display:none!important}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #7b9f54;
+  outline-offset:3px}
+button{min-height:42px}
+main>.grid>section{margin-top:6px}
+.badge{white-space:nowrap}
+.row .info{min-width:0;
+  overflow-wrap:anywhere}
+.amount{white-space:nowrap}
+.icon{flex-shrink:0}
+.edit{font-size:20px;
+  min-width:36px}
+.save-card{display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  padding:24px 28px;
+  margin-top:8px;
+  background:#eaf0df;
+  border:1px solid #d5dfc7;
+  border-radius:18px}
+.save-card h2{font-size:19px}
+.save-card p{font-size:13px;
+  color:#596954;
+  margin:9px 0}
+.save-buttons{display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  max-width:440px}
+.save-buttons .primary{background:#173d35;
+  color:#f7faec}
+.save-card .small{line-height:1.6}
+.footer{align-items:center;
+  margin-top:16px}
+.footer button{font-size:12px}
+.status-dot{color:#648143;
+  font-weight:750}
+.warning{background:#fff1d4;
+  border:1px solid #dfc57e;
+  color:#65480f;
+  padding:16px 20px;
+  border-radius:12px;
+  font-size:14px;
+  line-height:1.6;
+  margin-bottom:16px}
+dialog{color:#172a28;
+  max-height:90vh;
+  overflow:auto}
+dialog p{font-size:14px;
+  color:#5e6e63}
+form{gap:14px}
+input,select{min-height:44px}
+.field-row{display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px}
+.checkbox{display:flex;
+  align-items:center;
+  gap:9px}
+.checkbox input{width:18px;
+  height:18px;
+  min-height:0}
+.error{color:#a1372d;
+  font-size:13px;
+  margin:0}
+.fuel-fields{display:grid;
+  gap:14px}
+.toast{position:fixed;
+  bottom:18px;
+  left:50%;
+  transform:translateX(-50%);
+  max-width:min(580px,94vw);
+  padding:14px 18px;
+  background:#173d35;
+  color:white;
+  box-shadow:0 8px 30px #173d3533;
+  border-radius:12px;
+  display:flex;
+  gap:16px;
+  align-items:center;
+  z-index:5;
+  font-size:14px}
+.toast button{background:none;
+  border:0;
+  color:white;
+  font-size:20px}
+.help-list{padding-left:22px;
+  font-size:14px;
+  line-height:1.7}
+.help-list li{margin:12px 0}
+noscript{display:block;
+  background:#fff1d4;
+  padding:24px;
+  text-align:center}
+.legend span{display:flex;
+  align-items:center;
+  gap:8px}
+.dot{width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#93b865}
+.dot.service{background:#244c40}
+@media(max-width:800px){.save-card{flex-direction:column;
+  align-items:stretch}
+.save-buttons{max-width:none}
+.hero{gap:20px}
+h1{font-size:40px}
+.odo{min-width:140px}
+.odo strong{font-size:36px}
+}
+@media(max-width:500px){.hero{padding:24px}
+h1{font-size:35px}
+.stats{grid-template-columns:1fr}
+.stats .card{display:grid;
+  grid-template-columns:1fr auto;
+  column-gap:10px;
+  padding:15px 19px}
+.stats .value{grid-column:2;
+  grid-row:1 / 3;
+  align-self:center;
+  margin:0;
+  font-size:28px}
+.stats .label{grid-column:1}
+.stats .small{grid-column:1;
+  font-size:12px;
+  margin-top:5px}
+.card{padding:20px}
+.sectionhead{flex-wrap:wrap}
+.filters{gap:5px;
+  flex-wrap:wrap}
+.filters button{padding:8px 10px}
+.badge{font-size:9px;
+  padding:7px 9px}
+.brand{font-size:20px}
+.row{gap:9px}
+.row b{font-size:13px}
+.row small{font-size:11px}
+.row .icon{width:30px;
+  height:36px}
+.amount{font-size:14px}
+.edit{padding:4px;
+  min-width:25px}
+.save-card{padding:22px}
+.save-buttons>button:first-child{width:100%}
+.toast{width:94vw}
+dialog{padding:23px}
+.actions{flex-wrap:wrap}
+.field-row{grid-template-columns:1fr}
+}
+@media print{header .badge,button,.filters,.footer,.save-card,dialog,.toast{display:none!important}
+main{margin:0;
+  max-width:none}
+.hero{color:#173d35;
+  background:#f0f3e9}
+.hero .eyebrow,.hero p{color:#4f6654}
+.card{break-inside:avoid}
+.grid{display:block}
+}
+
+
+/* PERSONALIZZAZIONE — i valori predefiniti riprendono il diario originale. */
+:root {
+  --bg: #f4f5f0; --surface: #ffffff; --ink: #172a28;
+  --brand: #173d35; --brand-ink: #ffffff; --accent: #d9edac; --accent-ink: #172a28;
+  --muted: #67756e; --line: #dce0d7; --soft: #eaf0df; --radius: 18px;
+  --font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-size: 16px;
+}
+body {background:var(--bg);color:var(--ink);font-family:var(--font);font-size:var(--font-size)}
+header {border-color:var(--line);gap:16px;padding-top:max(20px,env(safe-area-inset-top))}
+main {padding-bottom:env(safe-area-inset-bottom)}
+button,input,select,textarea {font-family:inherit;font-size:inherit}
+button {touch-action:manipulation}
+textarea {width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;resize:vertical;background:var(--surface);color:var(--ink);font-size:16px}
+.card,dialog,.outline,input,select {background:var(--surface);color:var(--ink);border-color:var(--line)}
+.card,.save-card,dialog {border-radius:var(--radius)}
+.hero {background:var(--brand);color:var(--brand-ink);border-radius:calc(var(--radius) + 6px)}
+.hero .eyebrow,.hero p {color:inherit;opacity:.78}
+.hero .odo button {color:inherit;opacity:.9}
+.primary {background:var(--accent);color:var(--accent-ink)}
+.save-buttons .primary,.filters .active,.toast {background:var(--brand);color:var(--brand-ink)}
+.label,.small,.row small,.footer,dialog p,.save-card p,.edit {color:var(--muted)}
+.label {font-size:.82em}.row b {font-size:.9em}.row small {font-size:.77em}
+.badge,.icon,.notice,.filters button,.save-card {background:var(--soft);color:var(--ink)}
+.notice[style] {background:var(--bg)!important}
+.track {background:var(--line)}.fuelbar,.dot {background:var(--accent)}
+.servicebar,.dot.service {background:var(--brand)}
+.row {border-color:var(--line)}.save-card {border-color:var(--line)}
+.filters .active {color:var(--brand-ink)}.status-dot {color:var(--brand)}
+.brand {flex-shrink:0}.header-actions {display:flex;gap:14px;align-items:center}
+.footer-actions {display:flex;gap:8px;flex-wrap:wrap}
+.icon svg {width:25px;height:25px}.icon img {width:100%;height:100%;object-fit:contain}
+.appearance-modal {width:min(690px,96vw);padding:28px}
+.appearance-modal h3 {font-size:15px;margin:8px 0 0}
+.appearance-modal form {gap:18px}
+.appearance-modal .field-row {align-items:end}
+.appearance-modal input[type=color] {height:44px;padding:4px;cursor:pointer}
+.appearance-modal input[type=range] {padding:0;border:0;accent-color:var(--brand)}
+.appearance-modal input[type=file] {font-size:13px;padding:9px}
+.appearance-preview {padding:18px;border:1px solid var(--line);border-radius:var(--radius);display:flex;align-items:center;gap:14px;background:var(--bg)}
+.appearance-preview .icon {width:45px;height:45px;flex-shrink:0}
+.appearance-preview strong {display:block;font-size:1em}
+.appearance-preview .small {font-size:.78em}
+.appearance-buttons {display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;position:sticky;bottom:-28px;background:var(--surface);padding:15px 0 20px;border-top:1px solid var(--line);z-index:2}
+.appearance-buttons button:first-child {margin-right:auto}
+.icon-setting {border:1px solid var(--line);border-radius:12px;padding:13px;display:grid;gap:10px}
+.icon-setting .outline {font-size:12px;padding:6px}
+.appearance-modal details {border-top:1px solid var(--line);padding-top:16px}
+.appearance-modal summary {cursor:pointer;font-size:14px;font-weight:650;min-height:32px}
+.appearance-modal details p {font-size:12px}
+.code-text {font:13px ui-monospace,SFMono-Regular,Consolas,monospace;line-height:1.5;tab-size:2}
+#source-modal {width:min(800px,96vw)}
+#source-view {height:48vh;white-space:pre;font-size:13px}
+#source-modal .actions {justify-content:space-between}
+.pwa-status {margin-top:-25px;margin-bottom:20px;line-height:1.6}
+@media(max-width:700px) {
+  header {flex-wrap:wrap;padding:18px 20px}.header-actions {gap:8px}.header-actions .badge {display:none}
+  #personalize {font-size:13px;padding:9px 11px}
+  .appearance-modal {padding:22px;width:96vw;max-height:calc(100dvh - 24px)}
+  .appearance-buttons {bottom:-22px}
+  input,select,textarea {font-size:16px!important}
+  .appearance-modal .field-row {grid-template-columns:1fr 1fr}
+  .appearance-modal .icon-fields {grid-template-columns:1fr}
+  .appearance-modal .field-row.full-mobile {grid-template-columns:1fr}
+  .edit {min-width:44px;min-height:44px}
+  .save-buttons .primary {min-height:48px}
+  .footer {align-items:stretch}.footer-actions {justify-content:flex-start}
+  .toast {bottom:max(15px,env(safe-area-inset-bottom))}
+}
+@media(max-width:380px) {h1{font-size:31px}.brand{font-size:18px}.header-actions{margin-left:auto}.row{flex-wrap:wrap}.row .info{min-width:140px;flex:1}}
+</style>
+<style id="custom-style"></style>
+
+<link data-pwa rel="manifest" href="./manifest.webmanifest">
+<link data-pwa rel="apple-touch-icon" href="./assets/icon-180.png">
+<meta data-pwa name="apple-mobile-web-app-capable" content="yes">
+<meta data-pwa name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="robots" content="noindex,nofollow">
+</head>
+<body>
+<header><div class="brand"><span id="logo-text">z.</span> <span style="font-weight:450">diario di bordo</span></div><div class="header-actions"><span class="badge">IL TUO GARAGE PERSONALE</span><button id="personalize" class="outline">✦ Personalizza</button></div></header>
+<noscript>Per usare il diario, apri questo file con un browser che esegue JavaScript, come Chrome, Edge o Firefox. L’anteprima di un file potrebbe non eseguire l’app.</noscript>
+<main>
+<div id="storage-warning" class="warning" role="alert" hidden=""></div>
+<div class="hero"><div><div class="eyebrow" id="scooter-name">Zontes ZT368 E</div><h1 id="hero-title">Ogni viaggio, sotto controllo.</h1><p>Il diario del tuo scooter, un pieno alla volta.</p></div><div class="odo"><div class="eyebrow">Contachilometri</div><strong id="odo">— km</strong><button id="changeKm">Aggiorna chilometri</button></div></div>
+<div class="stats"><div class="card"><div class="label">Spese registrate</div><div class="value" id="total">0,00 €</div><div class="small">Dal ritiro dello scooter</div></div><div class="card"><div class="label">Benzina</div><div class="value" id="fuel">0,00 €</div><div class="small" id="fuelcount">0 rifornimenti</div></div><div class="card"><div class="label">Manutenzione</div><div class="value" id="service">0,00 €</div><div class="small" id="servicecount">0 interventi</div></div></div>
+<div class="grid"><section class="card"><div class="sectionhead"><h2>Il tuo registro</h2><button class="primary" id="add">+ Aggiungi spesa</button></div><div class="filters" role="group" aria-label="Filtra le spese"><button data-filter="all" class="active" aria-pressed="true">Tutto</button><button data-filter="fuel" aria-pressed="false">Rifornimenti</button><button data-filter="service" aria-pressed="false">Manutenzione</button></div><div id="rows"></div><button class="outline" id="undo">Annulla ultima modifica</button></section>
+<section class="card"><h2>Dove vanno le spese</h2><div class="track" aria-hidden="true"><div class="fuelbar" id="fb" style="width: 0%;"></div><div class="servicebar" id="sb" style="width: 0%;"></div></div><div class="legend"><span><i class="dot" aria-hidden="true"></i>Benzina</span><b id="fp">0%</b></div><div class="legend"><span><i class="dot service" aria-hidden="true"></i>Manutenzione</span><b id="sp">0%</b></div><div class="notice"><b>Ogni spesa al suo posto</b><br>Rifornimenti e manutenzione restano separati, così puoi seguire le tue spese nel tempo.</div><div class="notice" style="background:#f5f5ef"><b id="consumption-title">Consumo medio: in attesa di dati</b><br><span id="consumption-detail">Per una misura attendibile servono pieni completi consecutivi, litri aggiunti e chilometri al rifornimento. Registra anche i rifornimenti parziali: i soli importi non bastano.</span></div></section></div>
+<section class="save-card" aria-label="Conserva il diario"><div><h2>Il diario resta con te.</h2><p>Spese e aspetto, nello stesso backup. Da conservare o trasferire.</p><div class="small"><span class="status-dot">●</span> <span id="storage-state" role="status">Diario pronto: importa il tuo backup per iniziare.</span><br><span id="file-state">Le spese e le personalizzazioni vengono conservate su questo dispositivo.</span></div></div><div class="save-buttons"><button class="primary" id="save-html">↓ Salva diario completo</button><button class="outline" id="export">Esporta backup</button><button class="outline" id="import">Importa backup</button><input hidden="" type="file" id="file" accept=".json,application/json"></div></section>
+<div class="footer"><span>Versione autonoma · Nessun account necessario per usare il diario.<br>I dati restano su questo dispositivo. Il backup include anche font, colori e icone. I dispositivi non si sincronizzano automaticamente.</span><div class="footer-actions"><button class="outline" id="source-info">Codice e risorse</button><button class="outline" id="help">Come si usa e si conserva</button></div></div>
+<div class="small pwa-status" id="pwa-status" role="status"></div></main>
+<dialog id="modal" aria-labelledby="formtitle"><form id="form"><h2 id="formtitle">Modifica spesa</h2><label>Tipo<select name="type"><option value="fuel">Rifornimento</option><option value="service">Manutenzione</option></select></label><label>Descrizione<input name="title" required="" maxlength="200" placeholder="Es. Rifornimento o cambio olio"></label><label>Data · lascia vuota se non la ricordi<input type="date" name="date"></label><div class="field-row"><label>Importo (€)<input type="number" inputmode="decimal" name="amount" min="0.01" max="1000000" step="0.01" required=""></label><label>Contachilometri (opzionale)<input type="number" inputmode="numeric" name="km" min="0" max="99999999" step="1"></label></div><div id="fuel-fields" class="fuel-fields" hidden=""><label>Litri (opzionale)<input type="number" inputmode="decimal" name="liters" min="0.001" max="999" step="0.001" disabled=""></label><label class="checkbox"><input type="checkbox" name="full" disabled=""> Pieno completo</label></div><p id="form-error" class="error" role="alert"></p><div class="actions"><button type="button" class="delete" id="delete">Elimina</button><button type="button" class="outline" id="cancel">Annulla</button><button class="primary">Salva spesa</button></div></form></dialog>
+<dialog id="km-modal" aria-labelledby="km-title"><form id="km-form"><h2 id="km-title">Aggiorna chilometri</h2><label>Contachilometri (km)<input type="number" inputmode="numeric" id="km-value" min="0" max="99999999" step="1" required=""></label><label class="checkbox"><input type="checkbox" id="km-approx"> Il valore è approssimativo</label><div class="actions"><button type="button" class="outline" id="km-cancel">Annulla</button><button class="primary">Salva chilometri</button></div></form></dialog>
+<dialog id="import-modal" aria-labelledby="import-title"><h2 id="import-title">Importa il backup</h2><p id="import-summary"></p><div class="actions"><button class="outline" id="import-cancel">Annulla</button><button class="primary" id="import-confirm">Importa e sostituisci</button></div></dialog>
+<dialog id="help-modal" aria-labelledby="help-title"><h2 id="help-title">Il tuo diario, sempre con te</h2><ol class="help-list"><li><b>Apri il file dal computer.</b> Scarica Diario-Zontes.html e aprilo con Chrome, Edge o Firefox. Funziona senza connessione e senza accedere a ChatGPT.</li><li><b>Aggiungi le spese.</b> Il browser prova a ricordare le modifiche automaticamente. Usa lo stesso browser e lo stesso file per ritrovarle. La navigazione privata, la pulizia dei dati o lo spostamento del file possono far perdere questa memoria.</li><li><b>Conserva il diario completo.</b> Dopo aver aggiornato i dati, premi “Salva diario completo”. Verrà scaricato un nuovo file HTML contenente l’app e tutte le spese attuali. La copia precedente non viene modificata automaticamente. Conserva la copia più recente, anche su una chiavetta o in una cartella di backup.</li><li><b>Trasferisci i dati.</b> “Esporta backup” salva solo i dati in JSON. “Importa backup” accetta anche i backup del primo diario online. I dispositivi non si sincronizzano automaticamente.</li><li><b>Su iPhone.</b> Apri l’indirizzo web del diario in Safari, quindi Condividi → Aggiungi alla schermata Home → Apri come app web. Dopo la prima apertura online, attendi “Disponibile offline”. Puoi modificare spese e aspetto dall’iPhone. Il file HTML aperto dall’app File è solo un’anteprima: usa la versione web per i comandi.</li><li><b>Dal PC all’iPhone.</b> Esporta il backup, trasferiscilo con File/iCloud Drive o AirDrop e importalo dal diario aperto su iPhone. Per ritrovare i dati usa sempre la stessa app web. La cancellazione dei dati del browser può eliminare anche la copia offline: conserva i backup.</li><li><b>I tuoi dati restano tuoi.</b> Il diario non invia informazioni in rete. Chi possiede una tua copia del file o del backup può leggerne il contenuto.</li></ol><div class="actions"><button class="primary" id="help-close">Ho capito</button></div></dialog>
+<div id="toast" class="toast" hidden=""><span id="toast-text" role="status" aria-live="polite"></span><button id="toast-close" aria-label="Chiudi messaggio">×</button></div>
+
+<dialog id="appearance-modal" class="appearance-modal" aria-labelledby="appearance-title">
+<form id="appearance-form">
+<h2 id="appearance-title">Fallo tuo.</h2><p class="small" style="margin:0">Personalizza il diario. Colori e font si vedono subito nell’anteprima.</p>
+<div class="appearance-preview"><span id="fuel-icon-preview" class="icon" aria-hidden="true"></span><div><strong id="appearance-sample">Il tuo prossimo viaggio</strong><span class="small">Anteprima del font e delle icone</span></div><span id="service-icon-preview" class="icon" aria-hidden="true"></span></div>
+<div class="field-row"><label>Tema di partenza<select id="theme-preset"><option value="custom">Personalizzato</option><option value="salvia">Salvia · originale</option><option value="oceano">Oceano</option><option value="notte">Notte</option><option value="terra">Terracotta</option></select></label><label>Font<select name="font"><option value="system">Sistema · originale</option><option value="sans">Arial · essenziale</option><option value="rounded">Trebuchet · morbido</option><option value="serif">Georgia · elegante</option><option value="mono">Monospace · tecnico</option></select></label></div>
+<div class="field-row"><label>Dimensione testo <output id="font-output">16 px</output><input name="fontSize" type="range" min="14" max="20" step="1"></label><label>Angoli arrotondati <output id="radius-output">18 px</output><input name="radius" type="range" min="0" max="30" step="1"></label></div>
+<div class="field-row"><label>Colore principale<input name="brand" type="color"></label><label>Colore accento<input name="accent" type="color"></label></div>
+<div class="field-row"><label>Sfondo pagina<input name="background" type="color"></label><label>Sfondo riquadri<input name="surface" type="color"></label></div>
+<label>Colore testo<input name="text" type="color"></label>
+<h3>Icone del registro</h3><label>Stile<select name="iconStyle"><option value="emoji">Emoji · originale</option><option value="outline">Disegno a linee</option></select></label>
+<div class="field-row icon-fields"><div class="icon-setting"><label>Icona benzina · emoji o testo<input name="fuelEmoji" maxlength="16" autocomplete="off"></label><label>Oppure carica un’immagine<input id="fuel-image" type="file" accept="image/png,image/jpeg,image/webp"></label><button type="button" class="outline" id="fuel-image-clear">Rimuovi immagine benzina</button></div><div class="icon-setting"><label>Icona manutenzione · emoji o testo<input name="serviceEmoji" maxlength="16" autocomplete="off"></label><label>Oppure carica un’immagine<input id="service-image" type="file" accept="image/png,image/jpeg,image/webp"></label><button type="button" class="outline" id="service-image-clear">Rimuovi immagine manutenzione</button></div></div>
+<p class="small" style="margin:0">PNG, JPEG o WebP, massimo 150 KB ciascuna. Le immagini caricate hanno precedenza sulle icone predefinite.</p>
+<details><summary>Testi e logo</summary><div style="display:grid;gap:13px;margin-top:14px"><label>Logo testuale<input name="logo" maxlength="12"></label><label>Nome scooter<input name="scooterName" maxlength="80"></label><label>Titolo principale<input name="heroTitle" maxlength="120"></label></div></details>
+<details><summary>CSS personale · modifiche avanzate</summary><p>Puoi aggiungere regole come <code>.hero { border-radius: 0; }</code>. Il CSS viene applicato quando salvi. Usa risorse locali: @import e url() non sono ammessi in questo pannello.</p><label>Regole CSS<textarea name="customCSS" class="code-text" rows="7" maxlength="20000" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="/* Il tuo stile */
+.hero { border-radius: 0; }"></textarea></label></details>
+<p id="appearance-error" class="error" role="alert"></p>
+<div class="appearance-buttons">
+  <button type="button" class="outline" id="appearance-reset">Ripristina aspetto</button>
+  <button type="button" class="outline" id="css-reset">Ripristina CSS</button>
+  <button type="button" class="outline" id="appearance-cancel">Annulla</button>
+  <button class="primary">Salva aspetto</button>
+</div></form></dialog>
+<dialog id="source-modal" aria-labelledby="source-title"><h2 id="source-title">Codice e risorse</h2><p>Tutto il codice è aperto e modificabile. Nel pacchetto dei sorgenti trovi HTML, CSS, JavaScript e le icone separati. Il file unico contiene gli stessi elementi, senza servizi esterni.</p><label>Mostra<select id="source-type"><option value="css">CSS · grafica e font</option><option value="js">JavaScript · comportamento</option><option value="html">HTML completo · include i tuoi dati</option></select></label><label style="margin-top:14px">Codice<textarea id="source-view" class="code-text" readonly="" spellcheck="false" aria-label="Codice sorgente"></textarea></label><p class="small">Per modificare colori, font e icone usa Personalizza. Il codice HTML completo è modificabile; su iPhone usa Scarica codice per esportarlo. Per aggiornare il programma online bisogna ripubblicare i file su GitHub.</p><div class="actions"><button class="outline" id="source-copy">Copia codice</button><button class="outline" id="source-download">Scarica codice</button>
+<button class="outline" id="source-search">Cerca</button>
+<button class="primary" id="source-save">Salva nel file</button><button class="primary" id="source-close">Chiudi</button></div></dialog>
+
+<script id="diary-data" type="application/json">{
+  "format": "zontes-diary",
+  "version": 3,
+  "mode": "web",
+  "instance": "zontes-web-v4",
+  "revision": "web-iniziale-v4",
+  "savedAt": null,
+  "data": {
+    "km": 0,
+    "approx": false,
+    "records": []
+  }
+}</script>
+<script id="diary-app">
+/* PERSONALIZZAZIONE: valori predefiniti, validazione e icone. */
+const DEFAULT_APPEARANCE = {
+  font:'system', fontSize:16, radius:18,
+  brand:'#173d35', accent:'#d9edac', background:'#f4f5f0', surface:'#ffffff', text:'#172a28',
+  iconStyle:'emoji', fuelEmoji:'⛽', serviceEmoji:'🔧', fuelImage:'', serviceImage:'',
+  logo:'z.', scooterName:'Zontes ZT368 E', heroTitle:'Ogni viaggio, sotto controllo.', customCSS:''
+};
+const FONT_MAP = {
+  system:"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  sans:'Arial, Helvetica, sans-serif', rounded:"'Trebuchet MS', Arial, sans-serif",
+  serif:'Georgia, Cambria, serif', mono:'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace'
+};
+const PALETTES = {
+  salvia:{brand:'#173d35',accent:'#d9edac',background:'#f4f5f0',surface:'#ffffff',text:'#172a28'},
+  oceano:{brand:'#194e73',accent:'#b4e1ed',background:'#f0f6fa',surface:'#ffffff',text:'#193248'},
+  notte:{brand:'#26352f',accent:'#bdd78b',background:'#141a17',surface:'#202a25',text:'#edf3e9'},
+  terra:{brand:'#763d2f',accent:'#f1c4a2',background:'#f7f0e9',surface:'#fffaf5',text:'#38271f'}
+};
+function normalizeAppearance(input={}) {
+  if(!input || typeof input!=='object' || Array.isArray(input))throw Error('Impostazioni grafiche non valide.');
+  const a={...DEFAULT_APPEARANCE};
+  for(const key of ['brand','accent','background','surface','text']){
+    if(input[key]!=null){if(typeof input[key]!=='string'||!/^#[0-9a-f]{6}$/i.test(input[key]))throw Error('Colore non valido.');a[key]=input[key];}
+  }
+  for(const [key,min,max] of [['fontSize',14,20],['radius',0,30]]){
+    if(input[key]!=null){if(!Number.isInteger(input[key])||input[key]<min||input[key]>max)throw Error('Dimensione grafica non valida.');a[key]=input[key];}
+  }
+  if(input.font!=null){if(!Object.hasOwn(FONT_MAP,input.font))throw Error('Font non valido.');a.font=input.font;}
+  if(input.iconStyle!=null){if(!['emoji','outline'].includes(input.iconStyle))throw Error('Stile delle icone non valido.');a.iconStyle=input.iconStyle;}
+  for(const [key,max] of [['fuelEmoji',16],['serviceEmoji',16],['logo',12],['scooterName',80],['heroTitle',120]]){
+    if(input[key]!=null){if(typeof input[key]!=='string'||input[key].length>max)throw Error('Testo di personalizzazione non valido.');a[key]=input[key].trim()||DEFAULT_APPEARANCE[key];}
+  }
+  for(const key of ['fuelImage','serviceImage']){
+    if(input[key]!=null){if(typeof input[key]!=='string'||input[key].length>210000||(input[key]&&!/^data:image\/(?:png|jpeg|webp);base64,[a-z0-9+/=]+$/i.test(input[key])))throw Error('Immagine dell’icona non valida.');a[key]=input[key];}
+  }
+  if(input.customCSS!=null){
+    if(typeof input.customCSS!=='string'||input.customCSS.length>20000||/[<>\\]|@import|url\s*\(|expression\s*\(/i.test(input.customCSS))throw Error('Il CSS deve contenere solo regole locali, senza @import, url(), backslash o tag HTML.');
+    a.customCSS=input.customCSS;
+  }
+  return a;
+}
+function mixColor(a,b,ratio){const rgb=hex=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));const x=rgb(a),y=rgb(b);return '#'+x.map((v,i)=>Math.round(v*(1-ratio)+y[i]*ratio).toString(16).padStart(2,'0')).join('');}
+function readableInk(hex){const x=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);const l=x[0]*.2126+x[1]*.7152+x[2]*.0722;return l>.179?'#14231b':'#ffffff';}
+function iconMarkup(type,a) {
+  const image=a[type==='fuel'?'fuelImage':'serviceImage'];
+  if(image)return `<img alt="" src="${image}">`;
+  if(a.iconStyle==='emoji')return escapeHTML(a[type==='fuel'?'fuelEmoji':'serviceEmoji']);
+  const path=type==='fuel'?'<path d="M5 21V4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v17M3 21h13M6 7h7M14 11h2a2 2 0 0 1 2 2v4a1.5 1.5 0 0 0 3 0V8l-3-3M19 6v3h2"/>':'<path d="M14.5 6.5l3 3 3-3a6 6 0 0 1-7.7 7.7l-6.8 6.8a2.1 2.1 0 0 1-3-3l6.8-6.8A6 6 0 0 1 17.5 3.5z"/>';
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;
+}
+function applyAppearance(a) {
+  const vars={bg:a.background,surface:a.surface,ink:a.text,brand:a.brand,accent:a.accent,'brand-ink':readableInk(a.brand),'accent-ink':readableInk(a.accent),muted:mixColor(a.text,a.surface,.28),line:mixColor(a.text,a.surface,.84),soft:mixColor(a.accent,a.surface,.75),radius:a.radius+'px',font:FONT_MAP[a.font],'font-size':a.fontSize+'px'};
+  for(const [key,value] of Object.entries(vars))document.documentElement.style.setProperty('--'+key,value);
+  $('custom-style').textContent=a.customCSS;
+  $('logo-text').textContent=a.logo;$('scooter-name').textContent=a.scooterName;$('hero-title').textContent=a.heroTitle;
+  document.title=a.scooterName+' · Diario di bordo';
+  document.querySelector('meta[name="theme-color"]').setAttribute('content',a.brand);
+}
+
+
+'use strict';
+const $ = id => document.getElementById(id);
+const clone = value => JSON.parse(JSON.stringify(value));
+const uid = () => globalThis.crypto?.randomUUID?.() || `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+const money = value => value.toLocaleString('it-IT', {style:'currency', currency:'EUR'});
+const number = value => value.toLocaleString('it-IT', {maximumFractionDigits:2});
+const escapeHTML = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+const dated = value => new Date(value+'T12:00:00').toLocaleDateString('it-IT',{day:'numeric',month:'long',year:'numeric'});
+const cents = value => Math.round(value * 100);
+const validDate = value => value === '' || (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(value)) && new Date(value+'T12:00:00Z').toISOString().slice(0,10) === value);
+// VALIDAZIONE E DATI — compatibile con i backup delle versioni precedenti.
+function normalize(raw) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw Error('Il file non contiene un diario valido.');
+  if (raw.format && (raw.format !== 'zontes-diary' || ![2,3].includes(raw.version))) throw Error('Formato o versione del backup non supportati.');
+  const input = raw.format === 'zontes-diary' ? raw.data : raw;
+  if (!input || !Number.isSafeInteger(input.km) || input.km < 0 || input.km > 99999999 || !Array.isArray(input.records) || input.records.length > 10000) throw Error('Chilometri o elenco spese non validi.');
+  if (input.approx != null && typeof input.approx !== 'boolean') throw Error('Indicazione dei chilometri non valida.');
+  const ids = new Set();
+  const records = input.records.map(r => {
+    if (!r || typeof r !== 'object' || !['fuel','service'].includes(r.type) || typeof r.title !== 'string' || !r.title.trim() || r.title.length > 200 || typeof r.date !== 'string' || !validDate(r.date) || !Number.isFinite(r.amount) || r.amount < .01 || r.amount > 1000000) throw Error('Una delle spese contiene dati non validi.');
+    if (r.km != null && (!Number.isSafeInteger(r.km) || r.km < 0 || r.km > 99999999)) throw Error('Chilometraggio di una spesa non valido.');
+    if (r.liters != null && (!Number.isFinite(r.liters) || r.liters <= 0 || r.liters > 999)) throw Error('Litri di un rifornimento non validi.');
+    if (r.full != null && typeof r.full !== 'boolean') throw Error('Indicazione del pieno non valida.');
+    const id = String(r.id);
+    if (!/^[A-Za-z0-9_-]{1,80}$/.test(id) || r.id == null || ids.has(id)) throw Error('Identificativo di una spesa non valido o duplicato.');
+    ids.add(id);
+    return {id, type:r.type, title:r.title.trim(), date:r.date, amount:cents(r.amount)/100, km:r.km??null, liters:r.type==='fuel'?(r.liters??null):null, full:r.type==='fuel' && r.full===true};
+  });
+  return {km:input.km, approx:input.approx===true, records, appearance:normalizeAppearance(input.appearance)};
+}
+function totals(records) {
+  const fuel=records.filter(r=>r.type==='fuel'), service=records.filter(r=>r.type==='service');
+  const sum=list=>list.reduce((total,r)=>total+cents(r.amount),0)/100;
+  const fv=sum(fuel), sv=sum(service);
+  return {fuel, service, fv, sv, total:(cents(fv)+cents(sv))/100};
+}
+function consumption(records) {
+  // Each interval starts at a complete fill. Its starting liters are excluded.
+  // Every subsequent fill, including partial fills, must have a known date and liters.
+  const fuel=records.filter(r=>r.type==='fuel');
+  if (fuel.some(r=>!r.date)) return null;
+  // Senza chilometri, più pieni nello stesso giorno non hanno un ordine certo.
+  if(fuel.some(r=>r.km==null && fuel.filter(v=>v.date===r.date).length>1))return null;
+  const sorted=fuel.slice().sort((a,b)=>a.date.localeCompare(b.date) || ((a.km??Infinity)-(b.km??Infinity)) || a.id.localeCompare(b.id));
+  let anchor=null, liters=0, valid=true, distance=0, used=0, intervals=0;
+  for(const r of sorted) {
+    if(!anchor){if(r.full && r.km!=null)anchor=r;continue;}
+    if(r.liters==null)valid=false; else liters+=r.liters;
+    if(r.km!=null && r.km<anchor.km)valid=false;
+    if(r.full && r.km!=null){
+      const km=r.km-anchor.km;
+      if(valid && km>0 && liters>0){distance+=km;used+=liters;intervals++;}
+      anchor=r;liters=0;valid=true;
+    }
+  }
+  return distance?{value:used/distance*100,distance,liters:used,intervals}:null;
+}
+// STATO E SALVATAGGIO LOCALE
+const embedded=JSON.parse($('diary-data').textContent);
+let data=normalize(embedded), revision=embedded.revision, filter='all', editing=null;
+const storageKey='zontes-offline-v2:'+embedded.instance; // Conserva la chiave precedente per non perdere i dati.
+const isWebApp=embedded.mode==='web';
+let storageAvailable=true, lastSavedAt=null, fileDirty=false, changeUndo=null, pendingImport=null, toastTimer;
+try {
+  const cached=localStorage.getItem(storageKey);
+  if(cached){const p=JSON.parse(cached);data=normalize(p);revision=p.revision||uid();lastSavedAt=p.savedAt||null;fileDirty=revision!==embedded.revision;}
+  const probe=storageKey+':probe';localStorage.setItem(probe,'1');localStorage.removeItem(probe);
+} catch(error) {
+  storageAvailable=false;
+  $('storage-warning').hidden=false;
+  $('storage-warning').textContent='Il browser non riesce a recuperare o conservare i dati locali. Le modifiche restano aperte in questa pagina: usa “Salva diario completo” prima di chiuderla.';
+}
+function pack(instance=embedded.instance){return {format:'zontes-diary',version:3,mode:'portable',instance,revision,savedAt:lastSavedAt,data:clone(data)};}
+function toast(message){$('toast-text').textContent=message;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,6500);}
+function persist(){
+  revision=uid();lastSavedAt=new Date().toISOString();fileDirty=true;
+  try{localStorage.setItem(storageKey,JSON.stringify(pack()));storageAvailable=true;$('storage-warning').hidden=true;}
+  catch(error){storageAvailable=false;$('storage-warning').hidden=false;$('storage-warning').textContent='Salvataggio nel browser non riuscito. Usa “Salva diario completo” per conservare le modifiche prima di chiudere.';}
+  render();
+}
+function setUndo(){changeUndo=clone(data);}
+function render(){
+  applyAppearance(data.appearance);
+  const t=totals(data.records);
+  $('odo').textContent=(data.approx?'≈ ':'')+number(data.km)+' km';
+  $('total').textContent=money(t.total);$('fuel').textContent=money(t.fv);$('service').textContent=money(t.sv);
+  $('fuelcount').textContent=t.fuel.length+(t.fuel.length===1?' rifornimento':' rifornimenti');
+  $('servicecount').textContent=t.service.length+(t.service.length===1?' intervento':' interventi');
+  const fuelPct=t.total?Math.round(t.fv/t.total*100):0, servicePct=t.total?100-fuelPct:0;
+  $('fb').style.width=(t.total?t.fv/t.total*100:0)+'%';$('sb').style.width=(t.total?t.sv/t.total*100:0)+'%';
+  $('fp').textContent=fuelPct+'%';$('sp').textContent=servicePct+'%';
+  const records=data.records.filter(r=>filter==='all'||r.type===filter).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'') || (b.km??-1)-(a.km??-1));
+  $('rows').innerHTML=records.map(r=>`<div class="row"><div class="icon" aria-hidden="true">${iconMarkup(r.type,data.appearance)}</div><div class="info"><b>${escapeHTML(r.title)}</b><small>${r.date?dated(r.date):'Data da completare'}${r.km!=null?' · '+number(r.km)+' km':''}${r.liters!=null?' · '+number(r.liters)+' L':''}${r.full?' · Pieno completo':''}</small></div><span class="amount">${money(r.amount)}</span><button class="edit" aria-label="Modifica ${escapeHTML(r.title)}${r.date?' del '+dated(r.date):''}" data-edit="${r.id}">✎</button></div>`).join('')||'<div class="empty">Nessuna spesa registrata.</div>';
+  $('rows').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openExpense(b.dataset.edit));
+  document.querySelectorAll('[data-filter]').forEach(b=>{b.classList.toggle('active',b.dataset.filter===filter);b.setAttribute('aria-pressed',String(b.dataset.filter===filter));});
+  const avg=consumption(data.records);
+  $('consumption-title').textContent=avg?'Consumo misurato: '+number(avg.value)+' L/100 km':'Consumo medio: in attesa di dati';
+  $('consumption-detail').textContent=avg?`Calcolato su ${number(avg.distance)} km tra pieni completi, includendo i rifornimenti parziali registrati nell’intervallo. Si basa solo sui tratti con dati completi.`:'Per una misura attendibile servono pieni completi consecutivi, litri aggiunti e chilometri al rifornimento. Registra anche i rifornimenti parziali: i soli importi non bastano.';
+  $('storage-state').textContent=storageAvailable?(lastSavedAt?'Modifiche salvate in questo browser':'Pronto · dati iniziali caricati'):'Conserva una copia prima di chiudere';
+  $('file-state').textContent=fileDirty?'Ci sono modifiche da includere nella prossima copia del file.':'Puoi salvare una copia completa da conservare o trasferire.';
+  $('undo').hidden=!changeUndo;
+}
+function updateType(){const fuel=$('form').elements.type.value==='fuel';$('fuel-fields').hidden=!fuel;for(const key of ['liters','full'])$('form').elements[key].disabled=!fuel;}
+function openExpense(id=null){
+  editing=id;const r=data.records.find(r=>r.id===id),f=$('form');f.reset();$('form-error').textContent='';
+  $('formtitle').textContent=r?'Modifica spesa':'Aggiungi spesa';
+  for(const key of ['type','title','date','amount','km','liters'])f.elements[key].value=r?.[key]??(key==='type'?'fuel':key==='date'?today():'');
+  f.elements.full.checked=!!r?.full;$('delete').hidden=!r;updateType();$('modal').showModal();
+}
+$('add').onclick=()=>openExpense();$('cancel').onclick=()=>$('modal').close();$('form').elements.type.onchange=updateType;
+$('form').onsubmit=e=>{
+  e.preventDefault();const f=e.target.elements;
+  const r={id:editing??uid(),type:f.type.value,title:f.title.value.trim(),date:f.date.value,amount:Number(f.amount.value),km:f.km.value===''?null:Number(f.km.value),liters:f.type.value==='fuel'&&f.liters.value?Number(f.liters.value):null,full:f.type.value==='fuel'&&f.full.checked};
+  try{
+    const draft=normalize({...data,records:editing?data.records.map(v=>v.id===editing?r:v):[...data.records,r]});
+    setUndo();data=draft;persist();$('modal').close();toast(storageAvailable?'Spesa salvata.':'Spesa aggiunta. Salva il diario completo per conservarla.');
+  }catch(error){$('form-error').textContent=error.message;}
+};
+$('delete').onclick=()=>{setUndo();data.records=data.records.filter(r=>r.id!==editing);persist();$('modal').close();toast('Spesa eliminata. Puoi recuperarla con “Annulla ultima modifica”.');};
+$('undo').onclick=()=>{if(changeUndo){data=changeUndo;changeUndo=null;persist();toast('Ultima modifica annullata.');}};
+for(const b of document.querySelectorAll('[data-filter]'))b.onclick=()=>{filter=b.dataset.filter;render();};
+$('changeKm').onclick=()=>{$('km-value').value=data.km;$('km-approx').checked=data.approx;$('km-modal').showModal();};
+$('km-cancel').onclick=()=>$('km-modal').close();
+$('km-form').onsubmit=e=>{e.preventDefault();const value=Number($('km-value').value);if(Number.isSafeInteger(value)&&value>=0&&value<=99999999){setUndo();data.km=value;data.approx=$('km-approx').checked;persist();$('km-modal').close();toast('Chilometri aggiornati.');}};
+// DOWNLOAD — su iPhone usa il foglio Condividi per salvare in File.
+async function download(text,name,type){
+  const file=new File([text],name,{type});
+  if(window.matchMedia('(pointer:coarse)').matches && navigator.canShare?.({files:[file]})){
+    try{await navigator.share({files:[file],title:name});return true;}
+    catch(error){if(error.name==='AbortError')return false;}
+  }
+  const url=URL.createObjectURL(file),a=document.createElement('a');
+  a.href=url;a.download=name;document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),60000);return true;
+}
+const jsonForHTML=value=>JSON.stringify(value,null,2).replace(/</g,'\\u003c').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
+function makeStandaloneHTML(){
+  const doc=document.documentElement.cloneNode(true);
+  doc.querySelector('#code-search-panel')?.remove();
+  doc.querySelector('#source-view').textContent='';
+  doc.querySelector('#diary-data').textContent=jsonForHTML(pack(uid()));
+  doc.querySelectorAll('[data-pwa]').forEach(el=>el.remove());
+  doc.querySelector('#pwa-status').textContent='';
+  doc.querySelector('#custom-style').textContent=data.appearance.customCSS;
+  doc.querySelectorAll('dialog[open]').forEach(d=>d.removeAttribute('open'));
+  doc.querySelector('#toast').hidden=true;doc.querySelector('#storage-warning').hidden=true;
+  doc.querySelector('#file-state').textContent='Questa copia contiene i dati presenti al momento del salvataggio.';
+  doc.querySelectorAll('input').forEach(input=>{input.removeAttribute('value');input.removeAttribute('checked');});
+  return '<!doctype html>\n'+doc.outerHTML;
+}
+$('save-html').onclick=async()=>{if(await download(makeStandaloneHTML(),`Diario-Zontes-${today()}.html`,'text/html;charset=utf-8'))toast('Copia preparata. Conserva il file: contiene spese e personalizzazioni.');};
+$('export').onclick=async()=>{if(await download(JSON.stringify(pack(),null,2),`Zontes-backup-${today()}.json`,'application/json'))toast('Backup preparato con tutte le spese e le impostazioni grafiche.');};
+$('import').onclick=()=>$('file').click();
+$('file').onchange=async e=>{
+  const file=e.target.files?.[0];if(!file)return;
+  try{
+    if(file.size>5*1024*1024)throw Error('Il file supera il limite di 5 MB.');
+    pendingImport=normalize(JSON.parse(await file.text()));
+    const t=totals(pendingImport.records);$('import-summary').textContent=`${pendingImport.records.length} spese · ${money(t.total)} · ${number(pendingImport.km)} km. Questo backup sostituirà i dati aperti; potrai annullare l’importazione subito dopo.`;
+    $('import-modal').showModal();
+  }catch(error){pendingImport=null;toast('Importazione annullata: '+(error instanceof SyntaxError?'file JSON non valido.':error.message));}
+  e.target.value='';
+};
+$('import-cancel').onclick=()=>{pendingImport=null;$('import-modal').close();};
+$('import-confirm').onclick=()=>{if(pendingImport){setUndo();data=pendingImport;pendingImport=null;persist();$('import-modal').close();toast('Backup importato: spese e aspetto sono stati ripristinati.');}};
+$('help').onclick=()=>$('help-modal').showModal();$('help-close').onclick=()=>$('help-modal').close();
+$('toast-close').onclick=()=>$('toast').hidden=true;
+window.addEventListener('beforeunload',e=>{if(!storageAvailable && fileDirty){e.preventDefault();e.returnValue='';}});
+render();
+
+
+/* COMANDI DEL PANNELLO PERSONALIZZA */
+let appearanceDraft=null, appearanceBefore=null;
+const appearanceForm=$('appearance-form');
+const appearanceFields=['font','fontSize','radius','brand','accent','background','surface','text','iconStyle','fuelEmoji','serviceEmoji','logo','scooterName','heroTitle','customCSS'];
+function fillAppearanceForm(){
+  for(const key of appearanceFields)appearanceForm.elements[key].value=appearanceDraft[key];
+  $('theme-preset').value='custom';previewAppearance();
+}
+function previewAppearance(){
+  // Non applicare il CSS libero durante la digitazione: resta sempre possibile annullare.
+  const view={...appearanceDraft,customCSS:appearanceBefore?.customCSS||''};
+  applyAppearance(view);
+  $('font-output').value=view.fontSize+' px';$('radius-output').value=view.radius+' px';
+  $('fuel-icon-preview').innerHTML=iconMarkup('fuel',view);$('service-icon-preview').innerHTML=iconMarkup('service',view);
+  $('appearance-sample').textContent=view.heroTitle;
+}
+$('personalize').onclick=()=>{
+  appearanceBefore=clone(data.appearance);appearanceDraft=clone(data.appearance);
+  $('appearance-error').textContent='';fillAppearanceForm();$('appearance-modal').showModal();
+};
+for(const key of appearanceFields){
+  appearanceForm.elements[key].addEventListener('input',()=>{
+    appearanceDraft[key]=['fontSize','radius'].includes(key)?Number(appearanceForm.elements[key].value):appearanceForm.elements[key].value;
+    if(key!=='customCSS')previewAppearance();
+  });
+}
+$('theme-preset').onchange=e=>{if(PALETTES[e.target.value]){Object.assign(appearanceDraft,PALETTES[e.target.value]);const value=e.target.value;fillAppearanceForm();$('theme-preset').value=value;}};
+function cancelAppearance(){if(appearanceBefore)applyAppearance(appearanceBefore);$('appearance-modal').close();}
+$('appearance-cancel').onclick=cancelAppearance;
+$('appearance-modal').addEventListener('cancel',()=>{if(appearanceBefore)applyAppearance(appearanceBefore);});
+$('appearance-reset').onclick = () => {
+  const cssPersonale = appearanceForm.elements.customCSS.value;
+  appearanceDraft = clone(DEFAULT_APPEARANCE);
+  appearanceDraft.customCSS = cssPersonale;
+  fillAppearanceForm();
+  $('appearance-error').textContent = '';
+};
+
+$('css-reset').onclick = () => {
+  appearanceDraft.customCSS = '';
+  appearanceForm.elements.customCSS.value = '';
+  $('appearance-error').textContent = '';
+};appearanceForm.onsubmit=e=>{
+  e.preventDefault();try{
+    const appearance=normalizeAppearance(appearanceDraft);setUndo();data.appearance=appearance;persist();$('appearance-modal').close();
+    toast('Aspetto salvato. Il prossimo backup includerà anche queste impostazioni.');
+  }catch(error){$('appearance-error').textContent=error.message;}
+};
+for(const type of ['fuel','service']){
+  $(type+'-image').onchange=async e=>{
+    const file=e.target.files?.[0];if(!file)return;
+    try{
+      if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>150*1024)throw Error('Usa PNG, JPEG o WebP fino a 150 KB.');
+      const src=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(Error('Immagine non leggibile.'));r.readAsDataURL(file);});
+      await new Promise((resolve,reject)=>{const img=new Image();img.onload=resolve;img.onerror=()=>reject(Error('Il file non è un’immagine valida.'));img.src=src;});
+      appearanceDraft[type+'Image']=src;previewAppearance();$('appearance-error').textContent='';
+    }catch(error){$('appearance-error').textContent=error.message;}e.target.value='';
+  };
+  $(type+'-image-clear').onclick=()=>{appearanceDraft[type+'Image']='';previewAppearance();};
+}
+// Se una regola CSS nasconde i comandi, apri la pagina con #ripristina-aspetto.
+function emergencyThemeReset(){
+  if(location.hash==='#ripristina-aspetto'){setUndo();data.appearance=clone(DEFAULT_APPEARANCE);persist();toast('Aspetto originale ripristinato.');}
+}
+window.addEventListener('hashchange',emergencyThemeReset);emergencyThemeReset();
+/* SORGENTI: ricerca e modifica del file HTML. */
+let sourceDirty = false;
+let sourceMode = 'css';
+let sourceQuery = '';
+
+function sourceContent() {
+  switch ($('source-type').value) {
+    case 'css':
+      return $('base-style').textContent +
+        '\n/* CSS personale */\n' +
+        data.appearance.customCSS;
+    case 'js':
+      return $('diary-app').textContent;
+    default: {
+      const doc = new DOMParser().parseFromString(
+        makeStandaloneHTML(), 'text/html'
+      );
+      doc.querySelector('#source-view').textContent = '';
+      return '<!doctype html>\n' + doc.documentElement.outerHTML;
+    }
+  }
+}
+
+function renderSource() {
+  sourceMode = $('source-type').value;
+  $('source-view').value = sourceContent();
+  $('source-view').readOnly = sourceMode !== 'html';
+  $('source-save').disabled = sourceMode !== 'html';
+  sourceDirty = false;
+}
+
+function canDiscardSource() {
+  return !sourceDirty ||
+    confirm('Scartare le modifiche al codice non salvate?');
+}
+
+$('source-info').onclick = () => {
+  renderSource();
+  $('source-modal').showModal();
+};
+
+$('source-view').addEventListener('input', () => {
+  if (sourceMode === 'html') sourceDirty = true;
+});
+
+$('source-type').onchange = () => {
+  if (!canDiscardSource()) {
+    $('source-type').value = sourceMode;
+    return;
+  }
+  renderSource();
+};
+
+$('source-close').onclick = () => {
+  if (canDiscardSource()) $('source-modal').close();
+};
+
+$('source-modal').addEventListener('cancel', event => {
+  if (!canDiscardSource()) event.preventDefault();
+});
+
+$('source-copy').onclick = async () => {
+  try {
+    await navigator.clipboard.writeText($('source-view').value);
+    toast('Codice copiato.');
+  } catch {
+    $('source-view').focus();
+    $('source-view').select();
+    toast('Codice selezionato. Premi Ctrl + C.');
+  }
+};
+
+$('source-download').onclick = async () => {
+  await download(
+    $('source-view').value,
+    'Zontes-sorgente.' + sourceMode,
+    sourceMode === 'html' ? 'text/html' : 'text/plain'
+  );
+};
+
+$('source-search').onclick = () => {
+  const editor = $('source-view');
+  let panel = $('code-search-panel');
+
+  if (!panel) {
+    panel = document.createElement('div');
+    panel.id = 'code-search-panel';
+    panel.style.cssText =
+      'display:flex;gap:8px;flex-wrap:wrap;align-items:center;' +
+      'margin:14px 0;padding:12px;border:1px solid #aaa;' +
+      'border-radius:10px';
+
+    panel.innerHTML = `
+      <input id="code-search-input" type="text"
+        placeholder="Cerca parole o frasi nel codice"
+        aria-label="Cerca nel codice"
+        style="flex:1;min-width:180px">
+      <button type="button" class="outline"
+        id="code-search-next">Trova successivo</button>
+      <span id="code-search-result" role="status"></span>
+    `;
+
+    editor.closest('label').before(panel);
+
+    let previousQuery = '';
+
+    function findInCode() {
+      const input = $('code-search-input');
+      const query = input.value;
+      const status = $('code-search-result');
+
+      if (!query) {
+        status.textContent = 'Scrivi il testo da cercare.';
+        input.focus();
+        return;
+      }
+
+      const text = editor.value.toLowerCase();
+      const needle = query.toLowerCase();
+      const start = query === previousQuery
+        ? editor.selectionEnd : 0;
+
+      let position = text.indexOf(needle, start);
+      if (position === -1) position = text.indexOf(needle);
+
+      previousQuery = query;
+
+      if (position === -1) {
+        status.textContent = 'Testo non trovato nel codice.';
+        return;
+      }
+
+      editor.focus();
+      editor.setSelectionRange(position, position + query.length);
+
+      const line = editor.value.slice(0, position).split('\n').length;
+      const style = getComputedStyle(editor);
+      const height = parseFloat(style.lineHeight) ||
+        parseFloat(style.fontSize) * 1.2;
+
+      editor.scrollTop = Math.max(
+        0, (line - 1) * height - editor.clientHeight / 3
+      );
+
+      status.textContent = 'Trovato alla riga ' + line + '.';
+    }
+
+    $('code-search-next').onclick = findInCode;
+    $('code-search-input').onkeydown = event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        findInCode();
+      }
+    };
+  }
+
+  $('code-search-input').focus();
+  $('code-search-input').select();
+};$('source-save').onclick = async () => {
+  if (sourceMode !== 'html') return;
+
+  if (!window.showSaveFilePicker) {
+    alert(
+      'Il browser non permette il salvataggio diretto. ' +
+      'Usa Chrome o Edge sul PC, oppure Scarica codice.'
+    );
+    return;
+  }
+
+  try {
+    const handle = await window.showSaveFilePicker({
+      suggestedName: 'Diario-Zontes.html',
+      types: [{
+        description: 'Diario HTML',
+        accept: { 'text/html': ['.html'] }
+      }]
+    });
+
+    const writable = await handle.createWritable();
+    await writable.write($('source-view').value);
+    await writable.close();
+    sourceDirty = false;
+
+    alert(
+      'Codice salvato nel file selezionato. ' +
+      'Se hai scelto il diario aperto, ricaricalo con Ctrl + R ' +
+      'per applicare le modifiche.'
+    );
+  } catch (error) {
+    if (error.name !== 'AbortError') {
+      alert('Salvataggio non riuscito: ' + error.message);
+    }
+  }
+};/* APP WEB: cache offline solo per la versione ospitata su HTTPS. */
+if(isWebApp){
+  $('pwa-status').textContent='Per installare su iPhone: Safari → Condividi → Aggiungi alla schermata Home.';
+  if('serviceWorker' in navigator && window.isSecureContext){
+    navigator.serviceWorker.register('./sw.js',{scope:'./'}).then(()=>navigator.serviceWorker.ready).then(()=>{
+      $('pwa-status').textContent='Disponibile offline su questo dispositivo. Su iPhone aggiungi il diario alla schermata Home.';
+    }).catch(()=>{$('pwa-status').textContent='La copia offline non è pronta. Riapri il sito con una connessione attiva.';});
+  }
+}
+
+</script>
+
+</body></html>
