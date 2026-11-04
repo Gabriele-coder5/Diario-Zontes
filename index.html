@@ -426,9 +426,18 @@ textarea {width:100%;border:1px solid var(--line);border-radius:10px;padding:12p
 <meta data-pwa name="apple-mobile-web-app-capable" content="yes">
 <meta data-pwa name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="robots" content="noindex,nofollow">
+<style>
+#sync-modal{width:min(660px,96vw)}
+#sync-modal form{display:grid;gap:13px;margin:18px 0}
+#sync-modal [hidden]{display:none!important}
+#sync-modal input{font-size:16px}
+.sync-status{margin:16px 0 36px}
+@media(max-width:700px){.header-actions{flex-wrap:wrap}#sync-open{font-size:13px;padding:9px 11px}}
+</style>
+<script src="./sync-config.js" data-sync-config></script>
 </head>
 <body>
-<header><div class="brand"><span id="logo-text">z.</span> <span style="font-weight:450">diario di bordo</span></div><div class="header-actions"><span class="badge">IL TUO GARAGE PERSONALE</span><button id="personalize" class="outline">✦ Personalizza</button></div></header>
+<header><div class="brand"><span id="logo-text">z.</span> <span style="font-weight:450">diario di bordo</span></div><div class="header-actions"><span class="badge">IL TUO GARAGE PERSONALE</span><button id="sync-open" class="outline" type="button">☁ Sincronizzazione</button><button id="personalize" class="outline">✦ Personalizza</button></div></header>
 <noscript>Per usare il diario, apri questo file con un browser che esegue JavaScript, come Chrome, Edge o Firefox. L’anteprima di un file potrebbe non eseguire l’app.</noscript>
 <main>
 <div id="storage-warning" class="warning" role="alert" hidden=""></div>
@@ -437,12 +446,12 @@ textarea {width:100%;border:1px solid var(--line);border-radius:10px;padding:12p
 <div class="grid"><section class="card"><div class="sectionhead"><h2>Il tuo registro</h2><button class="primary" id="add">+ Aggiungi spesa</button></div><div class="filters" role="group" aria-label="Filtra le spese"><button data-filter="all" class="active" aria-pressed="true">Tutto</button><button data-filter="fuel" aria-pressed="false">Rifornimenti</button><button data-filter="service" aria-pressed="false">Manutenzione</button></div><div id="rows"></div><button class="outline" id="undo">Annulla ultima modifica</button></section>
 <section class="card"><h2>Dove vanno le spese</h2><div class="track" aria-hidden="true"><div class="fuelbar" id="fb" style="width: 0%;"></div><div class="servicebar" id="sb" style="width: 0%;"></div></div><div class="legend"><span><i class="dot" aria-hidden="true"></i>Benzina</span><b id="fp">0%</b></div><div class="legend"><span><i class="dot service" aria-hidden="true"></i>Manutenzione</span><b id="sp">0%</b></div><div class="notice"><b>Ogni spesa al suo posto</b><br>Rifornimenti e manutenzione restano separati, così puoi seguire le tue spese nel tempo.</div><div class="notice" style="background:#f5f5ef"><b id="consumption-title">Consumo medio: in attesa di dati</b><br><span id="consumption-detail">Per una misura attendibile servono pieni completi consecutivi, litri aggiunti e chilometri al rifornimento. Registra anche i rifornimenti parziali: i soli importi non bastano.</span></div></section></div>
 <section class="save-card" aria-label="Conserva il diario"><div><h2>Il diario resta con te.</h2><p>Spese e aspetto, nello stesso backup. Da conservare o trasferire.</p><div class="small"><span class="status-dot">●</span> <span id="storage-state" role="status">Diario pronto: importa il tuo backup per iniziare.</span><br><span id="file-state">Le spese e le personalizzazioni vengono conservate su questo dispositivo.</span></div></div><div class="save-buttons"><button class="primary" id="save-html">↓ Salva diario completo</button><button class="outline" id="export">Esporta backup</button><button class="outline" id="import">Importa backup</button><input hidden="" type="file" id="file" accept=".json,application/json"></div></section>
-<div class="footer"><span>Versione autonoma · Nessun account necessario per usare il diario.<br>I dati restano su questo dispositivo. Il backup include anche font, colori e icone. I dispositivi non si sincronizzano automaticamente.</span><div class="footer-actions"><button class="outline" id="source-info">Codice e risorse</button><button class="outline" id="help">Come si usa e si conserva</button></div></div>
-<div class="small pwa-status" id="pwa-status" role="status"></div></main>
+<div class="footer"><span>Versione autonoma · Nessun account necessario per usare il diario.<br>I dati sono conservati sul dispositivo e, se colleghi la sincronizzazione, nel tuo archivio online. Il backup include anche font, colori e icone. Per sincronizzare i dispositivi, configura l’archivio e accedi con lo stesso account.</span><div class="footer-actions"><button class="outline" id="source-info">Codice e risorse</button><button class="outline" id="help">Come si usa e si conserva</button></div></div>
+<p class="small sync-status" id="sync-status" role="status">Sincronizzazione non collegata.</p><div class="small pwa-status" id="pwa-status" role="status"></div></main>
 <dialog id="modal" aria-labelledby="formtitle"><form id="form"><h2 id="formtitle">Modifica spesa</h2><label>Tipo<select name="type"><option value="fuel">Rifornimento</option><option value="service">Manutenzione</option></select></label><label>Descrizione<input name="title" required="" maxlength="200" placeholder="Es. Rifornimento o cambio olio"></label><label>Data · lascia vuota se non la ricordi<input type="date" name="date"></label><div class="field-row"><label>Importo (€)<input type="number" inputmode="decimal" name="amount" min="0.01" max="1000000" step="0.01" required=""></label><label>Contachilometri (opzionale)<input type="number" inputmode="numeric" name="km" min="0" max="99999999" step="1"></label></div><div id="fuel-fields" class="fuel-fields" hidden=""><label>Litri (opzionale)<input type="number" inputmode="decimal" name="liters" min="0.001" max="999" step="0.001" disabled=""></label><label class="checkbox"><input type="checkbox" name="full" disabled=""> Pieno completo</label></div><p id="form-error" class="error" role="alert"></p><div class="actions"><button type="button" class="delete" id="delete">Elimina</button><button type="button" class="outline" id="cancel">Annulla</button><button class="primary">Salva spesa</button></div></form></dialog>
 <dialog id="km-modal" aria-labelledby="km-title"><form id="km-form"><h2 id="km-title">Aggiorna chilometri</h2><label>Contachilometri (km)<input type="number" inputmode="numeric" id="km-value" min="0" max="99999999" step="1" required=""></label><label class="checkbox"><input type="checkbox" id="km-approx"> Il valore è approssimativo</label><div class="actions"><button type="button" class="outline" id="km-cancel">Annulla</button><button class="primary">Salva chilometri</button></div></form></dialog>
 <dialog id="import-modal" aria-labelledby="import-title"><h2 id="import-title">Importa il backup</h2><p id="import-summary"></p><div class="actions"><button class="outline" id="import-cancel">Annulla</button><button class="primary" id="import-confirm">Importa e sostituisci</button></div></dialog>
-<dialog id="help-modal" aria-labelledby="help-title"><h2 id="help-title">Il tuo diario, sempre con te</h2><ol class="help-list"><li><b>Apri il file dal computer.</b> Scarica Diario-Zontes.html e aprilo con Chrome, Edge o Firefox. Funziona senza connessione e senza accedere a ChatGPT.</li><li><b>Aggiungi le spese.</b> Il browser prova a ricordare le modifiche automaticamente. Usa lo stesso browser e lo stesso file per ritrovarle. La navigazione privata, la pulizia dei dati o lo spostamento del file possono far perdere questa memoria.</li><li><b>Conserva il diario completo.</b> Dopo aver aggiornato i dati, premi “Salva diario completo”. Verrà scaricato un nuovo file HTML contenente l’app e tutte le spese attuali. La copia precedente non viene modificata automaticamente. Conserva la copia più recente, anche su una chiavetta o in una cartella di backup.</li><li><b>Trasferisci i dati.</b> “Esporta backup” salva solo i dati in JSON. “Importa backup” accetta anche i backup del primo diario online. I dispositivi non si sincronizzano automaticamente.</li><li><b>Su iPhone.</b> Apri l’indirizzo web del diario in Safari, quindi Condividi → Aggiungi alla schermata Home → Apri come app web. Dopo la prima apertura online, attendi “Disponibile offline”. Puoi modificare spese e aspetto dall’iPhone. Il file HTML aperto dall’app File è solo un’anteprima: usa la versione web per i comandi.</li><li><b>Dal PC all’iPhone.</b> Esporta il backup, trasferiscilo con File/iCloud Drive o AirDrop e importalo dal diario aperto su iPhone. Per ritrovare i dati usa sempre la stessa app web. La cancellazione dei dati del browser può eliminare anche la copia offline: conserva i backup.</li><li><b>I tuoi dati restano tuoi.</b> Il diario non invia informazioni in rete. Chi possiede una tua copia del file o del backup può leggerne il contenuto.</li></ol><div class="actions"><button class="primary" id="help-close">Ho capito</button></div></dialog>
+<dialog id="help-modal" aria-labelledby="help-title"><h2 id="help-title">Il tuo diario, sempre con te</h2><ol class="help-list"><li><b>Apri il file dal computer.</b> Scarica Diario-Zontes.html e aprilo con Chrome, Edge o Firefox. Funziona senza connessione e senza accedere a ChatGPT.</li><li><b>Aggiungi le spese.</b> Il browser prova a ricordare le modifiche automaticamente. Usa lo stesso browser e lo stesso file per ritrovarle. La navigazione privata, la pulizia dei dati o lo spostamento del file possono far perdere questa memoria.</li><li><b>Conserva il diario completo.</b> Dopo aver aggiornato i dati, premi “Salva diario completo”. Verrà scaricato un nuovo file HTML contenente l’app e tutte le spese attuali. La copia precedente non viene modificata automaticamente. Conserva la copia più recente, anche su una chiavetta o in una cartella di backup.</li><li><b>Trasferisci i dati.</b> “Esporta backup” salva solo i dati in JSON. “Importa backup” accetta anche i backup del primo diario online. Per sincronizzare i dispositivi, configura l’archivio e accedi con lo stesso account.</li><li><b>Su iPhone.</b> Apri l’indirizzo web del diario in Safari, quindi Condividi → Aggiungi alla schermata Home → Apri come app web. Dopo la prima apertura online, attendi “Disponibile offline”. Puoi modificare spese e aspetto dall’iPhone. Il file HTML aperto dall’app File è solo un’anteprima: usa la versione web per i comandi.</li><li><b>Dal PC all’iPhone.</b> Esporta il backup, trasferiscilo con File/iCloud Drive o AirDrop e importalo dal diario aperto su iPhone. Per ritrovare i dati usa sempre la stessa app web. La cancellazione dei dati del browser può eliminare anche la copia offline: conserva i backup.</li><li><b>I tuoi dati restano tuoi.</b> Il diario invia spese e personalizzazioni al tuo progetto Supabase soltanto quando colleghi la sincronizzazione. Le credenziali di accesso sono inviate a Supabase tramite HTTPS. Chi possiede una tua copia del file o del backup può leggerne il contenuto.</li></ol><div class="actions"><button class="primary" id="help-close">Ho capito</button></div></dialog>
 <div id="toast" class="toast" hidden=""><span id="toast-text" role="status" aria-live="polite"></span><button id="toast-close" aria-label="Chiudi messaggio">×</button></div>
 
 <dialog id="appearance-modal" class="appearance-modal" aria-labelledby="appearance-title">
@@ -467,6 +476,46 @@ textarea {width:100%;border:1px solid var(--line);border-radius:10px;padding:12p
   <button type="button" class="outline" id="appearance-cancel">Annulla</button>
   <button class="primary">Salva aspetto</button>
 </div></form></dialog>
+<dialog id="sync-modal" aria-labelledby="sync-title">
+  <h2 id="sync-title">Il diario su tutti i tuoi dispositivi</h2>
+  <p>Accedi con lo stesso indirizzo email su iPhone e PC. Spese, chilometri e personalizzazioni si aggiornano automaticamente mentre il diario è aperto e connesso.</p>
+  <p id="sync-message" role="status" aria-live="polite">Sincronizzazione non collegata.</p>
+  <form id="sync-config-form" hidden>
+    <h3>Collega il tuo archivio</h3>
+    <label>Indirizzo del progetto Supabase<input id="sync-url" type="url" placeholder="https://progetto.supabase.co" required></label>
+    <label>Chiave pubblica (publishable o anon)<input id="sync-key" type="text" autocomplete="off" required></label>
+    <p class="small">Usa soltanto la chiave pubblica. Le chiavi secret e service_role non vanno inserite qui.</p>
+    <button class="primary">Salva configurazione</button>
+  </form>
+  <form id="sync-login-form" hidden>
+    <label>Email del diario<input id="sync-email" type="email" autocomplete="username" required></label>
+    <label>Password<input id="sync-password" type="password" autocomplete="current-password" required></label>
+    <button id="sync-login" class="primary">Accedi</button>
+    <p class="small">È l'accesso del diario creato in Authentication → Users nel tuo progetto Supabase. Non la password di GitHub o dell'account Supabase.</p>
+  </form>
+  <section id="sync-choice" hidden>
+    <h3 id="sync-choice-title">Scegli la copia da usare</h3>
+    <p id="sync-choice-detail"></p>
+    <p id="sync-choice-summary" class="sync-private"></p>
+    <div class="actions">
+      <button type="button" class="outline" id="sync-backup-local">Salva backup dispositivo</button>
+      <button type="button" class="outline" id="sync-backup-remote">Salva backup online</button>
+    </div>
+    <div class="actions">
+      <button type="button" class="primary" id="sync-use-remote">Usa copia online</button>
+      <button type="button" class="outline" id="sync-use-local">Usa copia di questo dispositivo</button>
+    </div>
+    <p class="small">Le copie non vengono unite: prima di sostituirne una puoi conservarne il backup. Se l'archivio cambia mentre scegli, verrà richiesto un nuovo confronto.</p>
+  </section>
+  <div class="actions">
+    <button type="button" class="outline" id="sync-now" hidden>Aggiorna adesso</button>
+    <button type="button" class="outline" id="sync-logout" hidden>Esci</button>
+    <button type="button" class="outline" id="sync-reconfigure" hidden>Configura archivio</button>
+    <button type="button" class="primary" id="sync-close">Chiudi</button>
+  </div>
+  <p class="small">Offline le modifiche restano nel dispositivo. La sincronizzazione riprende alla riconnessione e alla riapertura. Mantieni i backup anche quando usi l'archivio online.</p>
+</dialog>
+
 <dialog id="source-modal" aria-labelledby="source-title"><h2 id="source-title">Codice e risorse</h2><p>Tutto il codice è aperto e modificabile. Nel pacchetto dei sorgenti trovi HTML, CSS, JavaScript e le icone separati. Il file unico contiene gli stessi elementi, senza servizi esterni.</p><label>Mostra<select id="source-type"><option value="css">CSS · grafica e font</option><option value="js">JavaScript · comportamento</option><option value="html">HTML completo · include i tuoi dati</option></select></label><label style="margin-top:14px">Codice<textarea id="source-view" class="code-text" readonly="" spellcheck="false" aria-label="Codice sorgente"></textarea></label><p class="small">Per modificare colori, font e icone usa Personalizza. Il codice HTML completo è modificabile; su iPhone usa Scarica codice per esportarlo. Per aggiornare il programma online bisogna ripubblicare i file su GitHub.</p><div class="actions"><button class="outline" id="source-copy">Copia codice</button><button class="outline" id="source-download">Scarica codice</button>
 <button class="outline" id="source-search">Cerca</button>
 <button class="primary" id="source-save">Salva nel file</button><button class="primary" id="source-close">Chiudi</button></div></dialog>
@@ -625,6 +674,7 @@ function persist(){
   try{localStorage.setItem(storageKey,JSON.stringify(pack()));storageAvailable=true;$('storage-warning').hidden=true;}
   catch(error){storageAvailable=false;$('storage-warning').hidden=false;$('storage-warning').textContent='Salvataggio nel browser non riuscito. Usa “Salva diario completo” per conservare le modifiche prima di chiudere.';}
   render();
+  window.zontesSyncChanged?.();
 }
 function setUndo(){changeUndo=clone(data);}
 function render(){
@@ -686,6 +736,11 @@ function makeStandaloneHTML(){
   const doc=document.documentElement.cloneNode(true);
   doc.querySelector('#code-search-panel')?.remove();
   doc.querySelector('#source-view').textContent='';
+  doc.querySelectorAll('.sync-private').forEach(el=>el.textContent='');
+  doc.querySelector('#sync-message').textContent='Sincronizzazione non collegata.';
+  doc.querySelector('#sync-status').textContent='Sincronizzazione non collegata.';
+  doc.querySelector('#sync-choice').hidden=true;
+  doc.querySelector('[data-sync-config]')?.remove();
   doc.querySelector('#diary-data').textContent=jsonForHTML(pack(uid()));
   doc.querySelectorAll('[data-pwa]').forEach(el=>el.remove());
   doc.querySelector('#pwa-status').textContent='';
@@ -975,7 +1030,251 @@ $('source-search').onclick = () => {
       alert('Salvataggio non riuscito: ' + error.message);
     }
   }
-};/* APP WEB: cache offline solo per la versione ospitata su HTTPS. */
+};/* Coda locale persistente + controllo atomico della versione remota. */
+class ZontesSyncEngine {
+  constructor(io, meta) {
+    this.io=io;this.meta={...meta};this.generation=0;this.busy=false;
+    this.blocked=false;this.remote=null;this.linked=!!meta.linked;
+  }
+  commitMeta() { this.io.store({...this.meta,linked:this.linked}); }
+  changed() {
+    this.generation++;
+    if (!this.linked) return;
+    this.meta.pending=true;this.commitMeta();
+    this.io.status('Modifiche in attesa di sincronizzazione.');
+  }
+  async inspect() {
+    if (this.busy) return;
+    this.busy=true;
+    try {
+      this.remote=await this.io.get();this.blocked=true;
+      this.io.choice(this.remote, false);
+    } finally {this.busy=false;}
+  }
+  async tick() {
+    if (!this.linked || this.busy || this.blocked || this.io.editing()) return;
+    this.busy=true;
+    const generation=this.generation;
+    try {
+      const row=await this.io.get();
+      if (generation!==this.generation || this.io.editing()) return;
+      if (!row || (this.meta.pending && row.version!==this.meta.version)) {
+        this.remote=row;this.blocked=true;this.io.choice(row,true);return;
+      }
+      if (this.meta.pending) await this.push(this.meta.version);
+      else if (row.version!==this.meta.version) {
+        this.io.apply(row.payload);this.meta.version=row.version;this.commitMeta();
+      }
+      this.io.status(this.meta.pending?'Nuove modifiche in attesa.':'Sincronizzato · '+new Date().toLocaleTimeString('it-IT'));
+    } catch(error) {
+      if (error.status===409) {
+        this.remote=await this.io.get();this.blocked=true;this.io.choice(this.remote,true);
+      } else throw error;
+    } finally {this.busy=false;}
+  }
+  async push(expected) {
+    const generation=this.generation;
+    const version=await this.io.put(this.io.snapshot(),expected);
+    this.meta.version=version;this.meta.pending=generation!==this.generation;
+    this.commitMeta();
+  }
+  async choose(which) {
+    if (this.busy) return;
+    this.busy=true;
+    try {
+      // Leggi di nuovo: l'altra copia può essere cambiata mentre si decideva.
+      const latest=await this.io.get();
+      if ((latest?.version??0)!==(this.remote?.version??0)) {
+        this.remote=latest;this.io.choice(latest,true);return;
+      }
+      if (which==='remote') {
+        if (!latest) throw Error('Non esiste ancora un diario online.');
+        this.io.apply(latest.payload);this.meta.version=latest.version;this.meta.pending=false;
+      } else {
+        // Memorizza l'intenzione prima della richiesta: un errore di rete non perde la coda.
+        this.linked=true;this.meta.version=latest?.version??0;this.meta.pending=true;this.commitMeta();
+        await this.push(this.meta.version);
+      }
+      this.linked=true;this.blocked=false;this.commitMeta();this.io.resolved();
+      this.io.status('Sincronizzazione attiva.');
+    } catch(error) {
+      if (error.status===409) {this.remote=await this.io.get();this.blocked=true;this.io.choice(this.remote,true);}
+      else throw error;
+    } finally {this.busy=false;}
+  }
+}
+
+/* Supabase Auth e Data API via HTTPS; nessuna password nel codice pubblicato. */
+(()=>{
+  const rootKey=storageKey+':cloud:';
+  const CONFIG_KEY=rootKey+'config',SESSION_KEY=rootKey+'session',META_KEY=rootKey+'meta';
+  const safeRead=key=>{try{return JSON.parse(localStorage.getItem(key));}catch{return null;}};
+  let config=null,session=null,engine=null,suppress=false,refreshPromise=null,timer=null,authBusy=false;
+  function message(value){$('sync-message').textContent=value;$('sync-status').textContent=value;}
+  function save(key,value){localStorage.setItem(key,JSON.stringify(value));}
+  function validateConfig(raw){
+    const url=new URL(raw?.url||'');
+    if(url.protocol!=='https:'||!/^([a-z0-9-]+)\.supabase\.co$/.test(url.hostname)||url.username||url.password||url.search||url.hash||url.pathname!=='/')throw Error('Inserisci il Project URL HTTPS di Supabase.');
+    const key=String(raw.key||'').trim();
+    if(!/^sb_publishable_[A-Za-z0-9_-]+$/.test(key)){
+      try{const part=key.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');if(JSON.parse(atob(part)).role!=='anon')throw Error();}
+      catch{throw Error('Serve la chiave publishable o la vecchia chiave anon, mai secret/service_role.');}
+    }
+    return {url:url.origin,key};
+  }
+  async function request(path,options={},access=null){
+    const abort=new AbortController(),timeout=setTimeout(()=>abort.abort(),12000);
+    try{
+      const response=await fetch(config.url+path,{...options,signal:abort.signal,headers:{apikey:config.key,'Content-Type':'application/json',...(access?{Authorization:'Bearer '+access}:{}),...options.headers}});
+      const raw=await response.text();let result=null;
+      try{result=raw?JSON.parse(raw):null;}catch{throw Error('Risposta del servizio non valida.');}
+      if(!response.ok){const error=Error(response.status===409?'Conflitto fra le copie.':(result?.msg||result?.message||result?.error_description||'Archivio non raggiungibile ('+response.status+').'));error.status=response.status;throw error;}
+      return result;
+    }finally{clearTimeout(timeout);}
+  }
+  function keepSession(value){
+    if(!value?.access_token||!value?.refresh_token||!value?.user?.id)throw Error('Sessione non valida.');
+    session={access_token:value.access_token,refresh_token:value.refresh_token,user:{id:value.user.id,email:value.user.email},expires_at:Date.now()+Number(value.expires_in||3600)*1000};
+    save(SESSION_KEY,session);
+  }
+  async function access(){
+    if(!session)throw Error('Accedi di nuovo al diario.');
+    if(session.expires_at>Date.now()+60000)return session.access_token;
+    if(!refreshPromise)refreshPromise=(async()=>{
+      const work=async()=>{
+        // Un'altra scheda potrebbe avere già aggiornato il refresh token.
+        const other=safeRead(SESSION_KEY);
+        if(other?.user?.id===session.user.id&&other.expires_at>Date.now()+60000){session=other;return;}
+        const response=await request('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:JSON.stringify({refresh_token:session.refresh_token})});
+        keepSession(response);
+      };
+      if(navigator.locks)await navigator.locks.request(rootKey+'refresh',work);else await work();
+    })().finally(()=>refreshPromise=null);
+    await refreshPromise;return session.access_token;
+  }
+  function snapshot(){return {format:'zontes-diary',version:3,data:clone(data)};}
+  function apply(payload){
+    const validated=normalize(payload);suppress=true;
+    try{data=validated;changeUndo=null;persist();if(!storageAvailable)throw Error('Salva un backup: il browser non conserva i dati locali.');}
+    finally{suppress=false;}
+  }
+  const editing=()=>['modal','km-modal','appearance-modal','source-modal','import-modal'].some(id=>$(id)?.open);
+  function summary(payload){const d=normalize(payload),t=totals(d.records);return d.records.length+' spese, '+d.km+' km, totale '+t.total.toLocaleString('it-IT',{style:'currency',currency:'EUR'});}
+  function choice(row,conflict){
+    $('sync-choice').hidden=false;
+    $('sync-choice-title').textContent=conflict?'Le copie richiedono un confronto':'Collega questo dispositivo';
+    $('sync-choice-detail').textContent=row?'Scegli se usare la copia online su questo dispositivo oppure inviare la copia di questo dispositivo agli altri.':'Non esiste ancora un diario online. Puoi crearlo usando i dati di questo dispositivo.';
+    $('sync-choice-summary').textContent='Questo dispositivo: '+summary(snapshot())+(row?' · Online: '+summary(row.payload):'');
+    $('sync-use-remote').hidden=!row;$('sync-backup-remote').hidden=!row;
+    message(conflict?'Sincronizzazione in pausa: scegli quale copia usare.':'Scegli la copia iniziale nel pannello Sincronizzazione.');
+    if(!editing()&&!$('sync-modal').open)$('sync-modal').showModal();
+  }
+  function display(){
+    $('sync-config-form').hidden=!!config;
+    $('sync-login-form').hidden=!config||!!session;
+    $('sync-logout').hidden=!session;$('sync-now').hidden=!session;
+    $('sync-reconfigure').hidden=!!session||!config;
+    if(!session)$('sync-choice').hidden=true;
+  }
+  function failure(error){
+    const offline=!navigator.onLine||error.name==='AbortError'||error instanceof TypeError;
+    message(offline?'Connessione assente: le modifiche restano qui. Riproverò alla riconnessione.':error.message);
+  }
+  async function connect(){
+    const token=await access(),owner=session.user.id;
+    let meta=safeRead(META_KEY);
+    if(meta?.owner!==owner||!Number.isSafeInteger(meta.version)||meta.version<0)meta={owner,version:0,pending:false,linked:false};
+    engine=new ZontesSyncEngine({
+      store:value=>save(META_KEY,{...value,owner}),
+      snapshot,apply,editing,status:message,choice,
+      resolved:()=>{$('sync-choice').hidden=true;},
+      get:async()=>{
+        const result=await request('/rest/v1/zontes_diaries?user_id=eq.'+encodeURIComponent(owner)+'&select=payload,version',{},await access());
+        if(!Array.isArray(result))throw Error('Archivio non configurato: esegui lo script SQL.');
+        if(!result.length)return null;
+        const row=result[0];normalize(row.payload);
+        if(!Number.isSafeInteger(row.version)||row.version<1)throw Error('Versione online non valida.');
+        return row;
+      },
+      put:async(payload,expected)=>{
+        const version=await request('/rest/v1/rpc/save_zontes_diary',{method:'POST',body:JSON.stringify({p_payload:payload,p_expected:expected})},await access());
+        if(!Number.isSafeInteger(version)||version<1)throw Error('Conferma del salvataggio non valida.');
+        return version;
+      }
+    },meta);
+    display();message('Accesso effettuato. Controllo il diario online…');
+    if(engine.linked)await engine.tick();else await engine.inspect();
+  }
+  async function run(){
+    if(!session||authBusy)return;
+    if(!navigator.onLine){failure(new TypeError());return;}
+    if(!engine){authBusy=true;try{await connect();}catch(error){failure(error);}finally{authBusy=false;}return;}
+    try{await engine.tick();}catch(error){failure(error);}
+  }
+  window.zontesSyncChanged=()=>{
+    if(suppress)return;
+    if(!engine){
+      const meta=safeRead(META_KEY);
+      if(meta?.linked){try{save(META_KEY,{...meta,pending:true});}catch{message('Esporta un backup: il browser non conserva la coda delle modifiche.');}}
+      return;
+    }
+    try{engine.changed();clearTimeout(timer);timer=setTimeout(run,700);}
+    catch(error){engine.blocked=true;message('Sincronizzazione sospesa: esporta un backup e verifica lo spazio del browser.');}
+  };
+  $('sync-open').onclick=()=>{display();$('sync-modal').showModal();};
+  $('sync-close').onclick=()=>$('sync-modal').close();
+  $('sync-config-form').onsubmit=e=>{
+    e.preventDefault();try{
+      const next=validateConfig({url:$('sync-url').value,key:$('sync-key').value});
+      if(config&&config.url!==next.url)localStorage.removeItem(META_KEY);
+      save(CONFIG_KEY,next);config=next;display();message('Archivio configurato. Accedi al diario.');
+    }catch(error){failure(error);}
+  };
+  $('sync-reconfigure').onclick=()=>{
+    $('sync-config-form').hidden=false;$('sync-url').value=config.url;$('sync-key').value=config.key;
+  };
+  $('sync-login-form').onsubmit=async e=>{
+    e.preventDefault();if(authBusy)return;authBusy=true;$('sync-login').disabled=true;
+    try{
+      const response=await request('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email:$('sync-email').value.trim(),password:$('sync-password').value})});
+      keepSession(response);$('sync-password').value='';await connect();
+    }catch(error){failure(error);}finally{authBusy=false;$('sync-login').disabled=false;display();}
+  };
+  $('sync-logout').onclick=async()=>{
+    if(engine?.busy||authBusy){message('Attendi la fine dell’operazione e riprova.');return;}
+    if(engine?.meta.pending&&!confirm('Ci sono modifiche non ancora sincronizzate. Rimarranno qui: esporta un backup prima di cambiare account. Vuoi uscire?'))return;
+    authBusy=true;
+    try{await request('/auth/v1/logout?scope=local',{method:'POST'},await access());}
+    catch(error){message('Uscita dal servizio non confermata. Verrà rimossa la sessione da questo browser.');}
+    finally{localStorage.removeItem(SESSION_KEY);session=null;engine=null;authBusy=false;display();message('Disconnesso. I dati restano su questo dispositivo; la sincronizzazione è ferma.');}
+  };
+  for(const [id,which] of [['sync-use-local','local'],['sync-use-remote','remote']])$(id).onclick=async()=>{
+    if(!engine)return;
+    const text=which==='local'?'Usare la copia di questo dispositivo come diario online? Gli altri dispositivi la riceveranno.':'Sostituire i dati di questo dispositivo con la copia online?';
+    if(!confirm(text))return;
+    try{await engine.choose(which);}catch(error){failure(error);}
+  };
+  $('sync-backup-local').onclick=()=>download(JSON.stringify(snapshot(),null,2),'Zontes-copia-dispositivo.json','application/json');
+  $('sync-backup-remote').onclick=()=>{if(engine?.remote)download(JSON.stringify(engine.remote.payload,null,2),'Zontes-copia-online.json','application/json');};
+  $('sync-now').onclick=async()=>{if(engine&&!engine.linked){try{await engine.inspect();}catch(error){failure(error);}}else run();};
+  addEventListener('online',run);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)run();});
+  setInterval(()=>{if(!document.hidden)run();},5000);
+  addEventListener('storage',event=>{
+    if(event.key===SESSION_KEY){const next=safeRead(SESSION_KEY);if(!next||next.user?.id!==session?.user?.id){session=null;engine=null;display();message('Accesso modificato in un’altra scheda. Accedi nuovamente.');}}
+    // Non applicare una copia obsoleta da una seconda scheda dello stesso browser.
+    if(event.key===storageKey&&engine){engine.blocked=true;message('Diario cambiato in un’altra scheda: ricarica questa pagina prima di continuare.');}
+  });
+  try{const raw=safeRead(CONFIG_KEY)||window.ZONTES_SYNC_CONFIG;if(raw?.url)config=validateConfig(raw);}
+  catch(error){failure(error);}
+  const stored=safeRead(SESSION_KEY);
+  if(config&&stored?.user?.id&&stored.refresh_token){session={...stored,expires_at:0};}
+  display();
+  if(session)connect().catch(failure);
+  else message(config?'Accedi per sincronizzare i dispositivi.':'Sincronizzazione da configurare · il diario continua a funzionare sul dispositivo.');
+})();
+
+/* APP WEB: cache offline solo per la versione ospitata su HTTPS. */
 if(isWebApp){
   $('pwa-status').textContent='Per installare su iPhone: Safari → Condividi → Aggiungi alla schermata Home.';
   if('serviceWorker' in navigator && window.isSecureContext){

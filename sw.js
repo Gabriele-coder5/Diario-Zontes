@@ -1,7 +1,7 @@
 /* Cache dell'app. I dati personali rimangono nel browser, non in questo file. */
 const PREFIX = 'zontes-app:' + self.registration.scope;
-const CACHE = PREFIX + ':eb66611e9d62';
-const ASSETS = ['index.html','manifest.webmanifest','assets/icon-180.png','assets/icon-192.png','assets/icon-512.png'];
+const CACHE = PREFIX + ':1aa63ab56b8e';
+const ASSETS = ['index.html','manifest.webmanifest','sync-config.js','assets/icon-180.png','assets/icon-192.png','assets/icon-512.png'];
 const atRoot = path => new URL(path,self.registration.scope).href;
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS.map(path=>new Request(atRoot(path),{cache:'reload'})))).then(()=>self.skipWaiting()));
